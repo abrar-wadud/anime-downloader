@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Downloader</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <h1>Anime Downloader</h1>
+        <form id="animeForm">
+            <div class="form-group">
+                <label for="animeUrl">Anime URL</label>
+                <input type="url" id="animeUrl" name="animeUrl" placeholder="Enter Anime URL" required>
+            </div>
+            <div class="form-group">
+                <label for="startEpisode">Start Episode</label>
+                <input type="number" id="startEpisode" name="startEpisode" placeholder="Start Episode Number" required>
+            </div>
+            <div class="form-group">
+                <label for="endEpisode">End Episode</label>
+                <input type="number" id="endEpisode" name="endEpisode" placeholder="End Episode Number" required>
+            </div>
+            <button type="submit" class="btn">Download Episodes</button>
+        </form>
+        <div id="loading" class="hidden">
+            <div class="loader"></div>
+            <p>Loading...</p>
+        </div>
+        <div id="episodeList" class="episode-list hidden"></div>
+    </div>
+    <script src="script.js" defer></script>
+</body>
+</html>

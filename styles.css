@@ -1,0 +1,113 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #333333;
+    color: #ffffff;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+input[type="url"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #555555;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #1976d2;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-bottom: 20px; /* Add margin-bottom to create space */
+}
+
+.btn:hover {
+    background-color: #1565c0;
+}
+
+#loading {
+    text-align: center;
+    display: none;
+}
+
+.loader {
+    border: 4px solid #ffffff;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none;
+}
+
+
+.episode-item {
+    margin-bottom: 10px;
+}
+
+.episode-item a {
+    display: block;
+    padding: 10px;
+    background-color: #555555;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.episode-item a:hover {
+    background-color: #444444;
+}
+
+
+#output select option {
+    background-color: #555555;
+    color: #ffffff;
+}
