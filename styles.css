@@ -1,26 +1,24 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #333333;
-    color: #ffffff;
+    background-color: #fff;
 }
 
 .container {
-    max-width: 400px;
+    max-width: 90%;
     margin: 50px auto;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #333333;
-    color: #ffffff;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    font-size: 24px;
-    font-weight: 500;
-    margin-bottom: 20px;
     text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+    font-size: 28px;
 }
 
 .form-group {
@@ -29,38 +27,35 @@ h1 {
 
 label {
     display: block;
-    font-size: 14px;
-    color: #ffffff;
     margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 input[type="url"],
 input[type="number"] {
-    width: 100%;
+    width: calc(100% - 24px); /* Adjusted width */
     padding: 10px;
-    border: 1px solid #555555;
-    border-radius: 4px;
-    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     font-size: 16px;
-    color: #ffffff;
-    background-color: #555555;
 }
 
 .btn {
+    display: block;
     width: 100%;
-    padding: 10px;
-    background-color: #1976d2;
-    color: #ffffff;
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
     transition: background-color 0.3s;
-    margin-bottom: 20px; /* Add margin-bottom to create space */
+    font-size: 16px;
 }
 
 .btn:hover {
-    background-color: #1565c0;
+    background-color: #0056b3;
 }
 
 #loading {
@@ -68,14 +63,28 @@ input[type="number"] {
     display: none;
 }
 
+/* Improved loading spinner animation */
 .loader {
-    border: 4px solid #ffffff;
-    border-top: 4px solid #3498db;
+    border: 5px solid #ffffff;
+    border-top: 5px solid #3498db;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     animation: spin 1s linear infinite;
-    margin: 0 auto;
+    margin: 10px auto;
+    transition: opacity 0.3s; /* Added transition for smoother appearance */
+}
+
+/* Error message display */
+.error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Accessibility improvements */
+label {
+    cursor: pointer; /* Improve usability by making labels clickable */
 }
 
 @keyframes spin {
@@ -87,6 +96,9 @@ input[type="number"] {
     display: none;
 }
 
+.episode-list {
+    margin-top: 20px;
+}
 
 .episode-item {
     margin-bottom: 10px;
@@ -94,20 +106,15 @@ input[type="number"] {
 
 .episode-item a {
     display: block;
-    padding: 10px;
-    background-color: #555555;
-    color: #ffffff;
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 8px;
     transition: background-color 0.3s;
+    font-size: 16px;
 }
 
 .episode-item a:hover {
-    background-color: #444444;
-}
-
-
-#output select option {
-    background-color: #555555;
-    color: #ffffff;
+    background-color: #0056b3;
 }

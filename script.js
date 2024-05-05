@@ -5,19 +5,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.getElementById('animeForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-    handleAnimeDownload(event);
+    if (validateForm()) {
+        handleAnimeDownload(event);
+    }
+});
+
+function validateForm() {
+    const animeUrl = document.getElementById('animeUrl').value.trim();
+    const startEpisode = parseInt(document.getElementById('startEpisode').value);
+    const endEpisode = parseInt(document.getElementById('endEpisode').value);
+
+    if (!animeUrl || !startEpisode || !endEpisode || startEpisode < 0 || endEpisode < 0 || startEpisode > endEpisode) {
+        document.getElementById('errorMessage').textContent = 'Please enter valid input.';
+        document.getElementById('errorMessage').classList.remove('hidden'); // Show error message
+        return false;
+    }
+
+    return true;
+}
+
+// Clear error message when user starts typing again
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', () => {
+        document.getElementById('errorMessage').textContent = '';
+        document.getElementById('errorMessage').classList.add('hidden'); // Hide error message
+    });
 });
 
 async function handleAnimeDownload(event) {
     const animeUrl = document.getElementById('animeUrl').value.trim();
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
     const endEpisode = parseInt(document.getElementById('endEpisode').value);
-
-    // Error handling for negative episode numbers or invalid ranges
-    if (isNaN(startEpisode) || isNaN(endEpisode) || startEpisode < 0 || endEpisode < 0 || startEpisode > endEpisode) {
-        alert('Please enter valid episode numbers.');
-        return;
-    }
 
     document.getElementById('loading').style.display = 'block';
     document.getElementById('episodeList').innerHTML = '';
@@ -32,7 +50,6 @@ async function handleAnimeDownload(event) {
         document.getElementById('loading').style.display = 'none';
     }
 }
-
 
 async function scrapeEpisodes(animeUrl, startEpisode, endEpisode) {
     const episodeOptions = [];
