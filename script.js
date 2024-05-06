@@ -59,8 +59,14 @@ function displayEpisodeList(episodeOptions) {
         episodeItem.classList.add('episode-item');
         episodeItem.innerHTML = `<a href="${episode.downloadLink}" target="_blank">${episode.title}</a>`;
         episodeListContainer.appendChild(episodeItem);
+
+        // Add click event listener to the episode item
+        episodeItem.addEventListener('click', function() {
+            this.classList.add('clicked');
+        });
     });
 }
+
 
 async function scrapeEpisodePage(url, episodeTitle) {
     try {
