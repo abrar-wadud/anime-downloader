@@ -7,21 +7,21 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="dark-mode">
-    <div class="container">
+    <main class="container">
         <h1>Anime Downloader</h1>
         <form id="animeForm">
-            <div class="form-group">
+            <section class="form-group">
                 <label for="animeUrl">Anime URL</label>
                 <input type="url" id="animeUrl" name="animeUrl" placeholder="Enter Anime URL" required>
-            </div>
-            <div class="form-group">
+            </section>
+            <section class="form-group">
                 <label for="startEpisode">Start Episode</label>
                 <input type="number" id="startEpisode" name="startEpisode" placeholder="Start Episode Number" required>
-            </div>
-            <div class="form-group">
+            </section>
+            <section class="form-group">
                 <label for="endEpisode">End Episode</label>
                 <input type="number" id="endEpisode" name="endEpisode" placeholder="End Episode Number" required>
-            </div>
+            </section>
             <button type="submit" class="btn">Download Episodes</button>
         </form>
         <div id="loading" class="hidden">
@@ -29,8 +29,7 @@
             <p>Loading...</p>
         </div>
         <div id="episodeList" class="episode-list hidden"></div>
-        <div id="errorMessage" class="error-message hidden"></div> <!-- Error message container -->
-    </div>
+    </main>
     <script src="script.js" defer></script>
 </body>
 </html>

@@ -1,22 +1,35 @@
+:root {
+    --main-bg-color: #333333;
+    --text-color: #ffffff;
+    --border-color: #555555;
+    --btn-bg-color: #1976d2;
+    --btn-bg-hover-color: #1565c0;
+    --loader-border-color: #3498db;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fff;
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
 }
 
 .container {
-    max-width: 90%;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #fff;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
 }
 
 h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
     text-align: center;
-    margin-bottom: 50px;
-    color: #333;
-    font-size: 28px;
 }
 
 .form-group {
@@ -25,35 +38,38 @@ h1 {
 
 label {
     display: block;
+    font-size: 14px;
+    color: var(--text-color);
     margin-bottom: 5px;
-    font-weight: bold;
-    font-size: 18px;
 }
 
 input[type="url"],
 input[type="number"] {
-    width: calc(100% - 24px); /* Adjusted width */
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
     font-size: 16px;
+    color: var(--text-color);
+    background-color: var(--border-color);
 }
 
 .btn {
-    display: block;
     width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: #fff;
+    padding: 10px;
+    background-color: var(--btn-bg-color);
+    color: var(--text-color);
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
     font-size: 16px;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: var(--btn-bg-hover-color);
 }
 
 #loading {
@@ -61,28 +77,14 @@ input[type="number"] {
     display: none;
 }
 
-/* Improved loading spinner animation */
 .loader {
-    border: 5px solid #ffffff;
-    border-top: 5px solid #3498db;
+    border: 4px solid var(--text-color);
+    border-top: 4px solid var(--loader-border-color);
     border-radius: 50%;
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     animation: spin 1s linear infinite;
-    margin: 10px auto;
-    transition: opacity 0.3s; /* Added transition for smoother appearance */
-}
-
-/* Error message display */
-.error-message {
-    color: #ff0000;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-/* Accessibility improvements */
-label {
-    cursor: pointer; /* Improve usability by making labels clickable */
+    margin: 0 auto;
 }
 
 @keyframes spin {
@@ -94,25 +96,20 @@ label {
     display: none;
 }
 
-.episode-list {
-    margin-top: 20px;
-}
-
 .episode-item {
     margin-bottom: 10px;
 }
 
 .episode-item a {
     display: block;
-    padding: 12px;
-    background-color: #007bff;
-    color: #fff;
+    padding: 10px;
+    background-color: var(--border-color);
+    color: var(--text-color);
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 4px;
     transition: background-color 0.3s;
-    font-size: 16px;
 }
 
 .episode-item a:hover {
-    background-color: #0056b3;
+    background-color: #444444;
 }

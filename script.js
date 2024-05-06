@@ -1,47 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Ensure the episode list is visible
     document.getElementById('episodeList').classList.remove('hidden');
 });
 
-document.getElementById('animeForm').addEventListener('submit', async function(event) {
+document.getElementById('animeForm').addEventListener('submit', function(event) {
     event.preventDefault();
-    if (validateForm()) {
-        handleAnimeDownload(event);
-    }
+    handleAnimeDownload();
 });
 
-function validateForm() {
+async function handleAnimeDownload() {
     const animeUrl = document.getElementById('animeUrl').value.trim();
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
     const endEpisode = parseInt(document.getElementById('endEpisode').value);
 
-    if (!animeUrl || !startEpisode || !endEpisode || startEpisode < 0 || endEpisode < 0 || startEpisode > endEpisode) {
-        document.getElementById('errorMessage').textContent = 'Please enter valid input.';
-        document.getElementById('errorMessage').classList.remove('hidden'); // Show error message
-        return false;
+    if (isNaN(startEpisode) || isNaN(endEpisode) || startEpisode < 0 || endEpisode < 0 || startEpisode > endEpisode) {
+        alert('Please enter valid episode numbers.');
+        return;
     }
-
-    return true;
-}
-
-// Clear error message when user starts typing again
-document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', () => {
-        document.getElementById('errorMessage').textContent = '';
-        document.getElementById('errorMessage').classList.add('hidden'); // Hide error message
-    });
-});
-
-async function handleAnimeDownload(event) {
-    const animeUrl = document.getElementById('animeUrl').value.trim();
-    const startEpisode = parseInt(document.getElementById('startEpisode').value);
-    const endEpisode = parseInt(document.getElementById('endEpisode').value);
 
     document.getElementById('loading').style.display = 'block';
     document.getElementById('episodeList').innerHTML = '';
 
     try {
-        // Fetching download links
         const episodeOptions = await scrapeEpisodes(animeUrl, startEpisode, endEpisode);
         displayEpisodeList(episodeOptions);
     } catch (error) {
@@ -53,20 +32,18 @@ async function handleAnimeDownload(event) {
 
 async function scrapeEpisodes(animeUrl, startEpisode, endEpisode) {
     const episodeOptions = [];
-    const concurrentRequests = 5; // Number of simultaneous requests
+    const concurrentRequests = 5;
     const promises = [];
 
-    // Create an array of promises for scraping multiple episode links
     for (let episodeNumber = startEpisode; episodeNumber <= endEpisode; episodeNumber++) {
         const episodeUrl = changeUrlFormat(animeUrl, episodeNumber);
         const episodeTitle = `Episode ${episodeNumber}`;
         promises.push(scrapeEpisodePage(episodeUrl, episodeTitle));
 
-        // Wait for all promises to resolve if reached the maximum number of concurrent requests
         if (promises.length >= concurrentRequests || episodeNumber === endEpisode) {
             const results = await Promise.all(promises);
-            episodeOptions.push(...results.filter(link => link)); // Filter out null values
-            promises.length = 0; // Reset promises array
+            episodeOptions.push(...results.filter(link => link));
+            promises.length = 0;
         }
     }
 
@@ -75,14 +52,13 @@ async function scrapeEpisodes(animeUrl, startEpisode, endEpisode) {
 
 function displayEpisodeList(episodeOptions) {
     const episodeListContainer = document.getElementById('episodeList');
-    episodeListContainer.innerHTML = ''; // Clear previous episodes
+    episodeListContainer.innerHTML = '';
 
-    // Create list items for each episode
     episodeOptions.forEach(episode => {
-        const listItem = document.createElement('div');
-        listItem.classList.add('episode-item');
-        listItem.innerHTML = `<a href="${episode.downloadLink}" target="_blank">${episode.title}</a>`;
-        episodeListContainer.appendChild(listItem);
+        const episodeItem = document.createElement('div');
+        episodeItem.classList.add('episode-item');
+        episodeItem.innerHTML = `<a href="${episode.downloadLink}" target="_blank">${episode.title}</a>`;
+        episodeListContainer.appendChild(episodeItem);
     });
 }
 
@@ -94,8 +70,6 @@ async function scrapeEpisodePage(url, episodeTitle) {
         }
         const html = await response.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
-
-        // Optimize the selector to directly target the download link
         const downloadLink = doc.querySelector('.favorites_book a[href^="http"]')?.getAttribute('href');
 
         return { title: episodeTitle, downloadLink: downloadLink || null };
