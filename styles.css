@@ -1,7 +1,7 @@
 :root {
-    --main-bg-color: #333333;
+    --main-bg-color: #000000;
     --text-color: #ffffff;
-    --border-color: #555555;
+    --border-color: #303030;
     --btn-bg-color: #1976d2;
     --btn-bg-hover-color: #1565c0;
     --loader-border-color: #3498db;
@@ -17,7 +17,7 @@ body {
 
 .container {
     max-width: 400px;
-    margin: 50px auto;
+    margin: 30px auto;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -26,9 +26,9 @@ body {
 }
 
 h1 {
-    font-size: 24px;
-    font-weight: 500;
-    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 40px;
     text-align: center;
 }
 
