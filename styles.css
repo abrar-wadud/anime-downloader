@@ -5,7 +5,7 @@
     --btn-bg-color: #1976d2;
     --btn-bg-hover-color: #1565c0;
     --loader-border-color: #3498db;
-    --clicked-item-color: #646464;
+    --clicked-item-color: #909090;
 }
 
 body {
@@ -111,7 +111,7 @@ input[type="number"] {
     transition: background-color 0.3s;
 }
 
-.episode-item a:hover {
+.episode-item:not(.clicked) a:hover {
     background-color: #444444;
 }
 
