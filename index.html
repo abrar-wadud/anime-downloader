@@ -5,18 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime Downloader</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="/manifest.json">
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          }, function(err) {
-            console.error('ServiceWorker registration failed: ', err);
-          });
-        });
-      }
-    </script>
+    <link rel="manifest" href="manifest.json">
 </head>
 <body class="dark-mode">
     <main class="container">
@@ -43,5 +32,16 @@
         <div id="episodeList" class="episode-list hidden"></div>
     </main>
     <script src="script.js" defer></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    console.error('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
