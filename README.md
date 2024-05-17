@@ -31,13 +31,13 @@ To run the Anime Downloader web application locally, follow these steps:
 1. **Clone the Repository**: Clone this repository to your local machine using the following command:
 
    ```bash
-   git clone https://github.com/yourusername/anime-downloader.git
+   git clone https://github.com/Dark0Echo/Dark0Echo.github.io.git
    ```
 
 2. **Navigate to the Project Directory**: Use the `cd` command to navigate to the project directory:
 
    ```bash
-   cd anime-downloader
+   cd Dark0Echo.github.io
    ```
 
 3. **Open the Application**: Open the `index.html` file in your preferred web browser to access the application.
