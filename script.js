@@ -12,8 +12,21 @@ async function handleAnimeDownload() {
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
     const endEpisode = parseInt(document.getElementById('endEpisode').value);
 
-    if (isNaN(startEpisode) || isNaN(endEpisode) || startEpisode < 0 || endEpisode < 0 || startEpisode > endEpisode) {
-        alert('Please enter valid episode numbers.');
+    const errorContainer = document.getElementById('errorContainer');
+    errorContainer.innerHTML = ''; // Clear previous errors
+
+    if (isNaN(startEpisode) || startEpisode < 1) {
+        showError('Please enter a valid start episode number.');
+        return;
+    }
+
+    if (isNaN(endEpisode) || endEpisode < 1) {
+        showError('Please enter a valid end episode number.');
+        return;
+    }
+
+    if (startEpisode > endEpisode) {
+        showError('Start episode number must be less than or equal to end episode number.');
         return;
     }
 
@@ -25,10 +38,20 @@ async function handleAnimeDownload() {
         displayEpisodeList(episodeOptions);
     } catch (error) {
         console.error('Error:', error);
+        showError('An error occurred while fetching episodes. Please try again later.');
     } finally {
         document.getElementById('loading').style.display = 'none';
     }
 }
+
+function showError(message) {
+    const errorContainer = document.getElementById('errorContainer');
+    const errorItem = document.createElement('div');
+    errorItem.classList.add('error-item');
+    errorItem.textContent = message;
+    errorContainer.appendChild(errorItem);
+}
+
 
 async function scrapeEpisodes(animeUrl, startEpisode, endEpisode) {
     const episodeOptions = [];
