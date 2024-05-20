@@ -48,9 +48,11 @@ To run the Anime Downloader web application locally, follow these steps:
    
 2. **Input Anime Details**: Enter the Anime URL, start episode number, and end episode number in the respective input fields provided in the form.
 
-3. **Initiate Download**: Click on the "Download Episodes" button to initiate the download process.
+3. **The Anime URL**: Your anime url has to be from https://anitaku.so/home.html this website or else it wouldn't work** | Copy the url of the anime you want to download.
 
-4. **Download Episode(s)**: Once the download links are fetched, click on the episode links displayed to download the respective episodes. The download links open in a new tab/window for user convenience.
+4. **Initiate Download**: Click on the "Download Episodes" button to initiate the download process.
+
+5. **Download Episode(s)**: Once the download links are fetched, click on the episode links displayed to download the respective episodes. The download links open in a new tab/window for user convenience.
 
 ## Contributing
 
