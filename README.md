@@ -54,6 +54,9 @@ To run the Anime Downloader web application locally, follow these steps:
 
 5. **Download Episode(s)**: Once the download links are fetched, click on the episode links displayed to download the respective episodes. The download links open in a new tab/window for user convenience.
 
+## Usage without installation(github page)
+1. Use this website https://dark0echo.github.io/anime-downloader/
+
 ## Contributing
 
 Contributions to this project are welcome and encouraged! If you'd like to contribute, please follow these guidelines:
