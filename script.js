@@ -52,7 +52,6 @@ function showError(message) {
     errorContainer.appendChild(errorItem);
 }
 
-
 async function scrapeEpisodes(animeUrl, startEpisode, endEpisode) {
     const episodeOptions = [];
     const concurrentRequests = 5;
@@ -89,7 +88,6 @@ function displayEpisodeList(episodeOptions) {
         });
     });
 }
-
 
 async function scrapeEpisodePage(url, episodeTitle) {
     try {
