@@ -41,7 +41,7 @@ async function searchAnime(query) {
 
         items.forEach(item => {
             const titleElement = item.querySelector('.name a');
-            const title = titleElement.getAttribute('title');
+            const title = titleElement.textContent.trim();
             const url = titleElement.getAttribute('href');
             const imgSrc = item.querySelector('.img img').getAttribute('src');
             const releasedYear = item.querySelector('.released').textContent.trim();
@@ -55,16 +55,15 @@ async function searchAnime(query) {
                 <div class="result-info">
                     <h3>${title}</h3>
                     <p>${releasedYear}</p>
-                    <button type="button" data-url="${url}" data-title="${title}" data-year="${releasedYear}">Select</button>
+                    <button type="button" data-url="${url}">Select</button>
                 </div>
             `;
 
             resultItem.querySelector('button').addEventListener('click', function() {
                 selectedAnimeUrl = `https://anitaku.pe${url}`; // Save selected URL
-                selectedAnimeTitle = `${this.getAttribute('data-title')} (${this.getAttribute('data-year')})`; // Save selected title with year
-                document.getElementById('animeSearch').value = selectedAnimeTitle; // Update search input field
-                document.getElementById('searchResults').innerHTML = ''; // Clear search results after selection
-                document.getElementById('searchResults').classList.add('hidden'); // Hide search results
+                document.getElementById('animeSearch').value = `${title} (${releasedYear})`; // Update input field
+                searchResultsContainer.innerHTML = ''; // Clear search results after selection
+                searchResultsContainer.classList.add('hidden'); // Hide search results
             });
 
             searchResultsContainer.appendChild(resultItem);
@@ -74,6 +73,7 @@ async function searchAnime(query) {
         showError('An error occurred while searching. Please try again later.');
     }
 }
+
 
 async function handleFetchDownloadLinks() {
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
