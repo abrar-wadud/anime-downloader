@@ -14,7 +14,7 @@ document.getElementById('animeSearch').addEventListener('input', () => {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
         const query = document.getElementById('animeSearch').value.trim();
-        if (query.length > 2) {
+        if (query.length > 0) {
             searchAnime(query);
             document.getElementById('searchResults').classList.remove('hidden');
         } else {
