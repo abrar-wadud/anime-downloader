@@ -191,3 +191,7 @@ input[type="text"] {
 .result-info button:hover {
     background-color: var(--btn-bg-hover-color);
 }
+
+.search-results.hidden {
+    display: none;
+}

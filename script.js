@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('episodeList').classList.remove('hidden');
+    // Initialize page state
+    document.getElementById('episodeList').classList.add('hidden');
+    document.getElementById('searchResults').classList.add('hidden');
 });
 
 document.getElementById('animeForm').addEventListener('submit', function(event) {
@@ -9,10 +11,14 @@ document.getElementById('animeForm').addEventListener('submit', function(event) 
 
 document.getElementById('animeSearch').addEventListener('input', function() {
     const query = this.value.trim();
+    const searchResultsContainer = document.getElementById('searchResults');
+
     if (query.length > 2) {
         searchAnime(query);
+        searchResultsContainer.classList.remove('hidden');
     } else {
-        document.getElementById('searchResults').innerHTML = ''; // Clear search results if query is too short
+        searchResultsContainer.innerHTML = ''; // Clear search results if query is too short
+        searchResultsContainer.classList.add('hidden');
     }
 });
 
@@ -53,6 +59,7 @@ async function searchAnime(query) {
             resultItem.querySelector('button').addEventListener('click', function() {
                 document.getElementById('animeUrl').value = `https://anitaku.pe${url}`;
                 document.getElementById('searchResults').innerHTML = ''; // Clear search results after selection
+                document.getElementById('searchResults').classList.add('hidden'); // Hide search results
             });
 
             searchResultsContainer.appendChild(resultItem);
@@ -160,6 +167,8 @@ function displayEpisodeList(episodeOptions) {
             this.classList.add('clicked');
         });
     });
+
+    episodeListContainer.classList.remove('hidden'); // Ensure episode list is visible
 }
 
 function changeUrlFormat(animeUrl, episodeNumber) {
