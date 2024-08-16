@@ -7,6 +7,62 @@ document.getElementById('animeForm').addEventListener('submit', function(event) 
     handleFetchDownloadLinks();
 });
 
+document.getElementById('animeSearch').addEventListener('input', function() {
+    const query = this.value.trim();
+    if (query.length > 2) {
+        searchAnime(query);
+    } else {
+        document.getElementById('searchResults').innerHTML = ''; // Clear search results if query is too short
+    }
+});
+
+async function searchAnime(query) {
+    const searchUrl = `https://anitaku.pe/search.html?keyword=${encodeURIComponent(query)}`;
+    try {
+        const response = await fetch(searchUrl);
+        if (!response.ok) {
+            throw new Error('Failed to retrieve search results. Status code: ' + response.status);
+        }
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const items = doc.querySelectorAll('.items li');
+        
+        const searchResultsContainer = document.getElementById('searchResults');
+        searchResultsContainer.innerHTML = ''; // Clear previous results
+
+        items.forEach(item => {
+            const titleElement = item.querySelector('.name a');
+            const title = titleElement.getAttribute('title');
+            const url = titleElement.getAttribute('href');
+            const imgSrc = item.querySelector('.img img').getAttribute('src');
+            const releasedYear = item.querySelector('.released').textContent.trim();
+
+            const resultItem = document.createElement('div');
+            resultItem.classList.add('result-item');
+            resultItem.innerHTML = `
+                <div class="result-img">
+                    <img src="${imgSrc}" alt="${title}">
+                </div>
+                <div class="result-info">
+                    <h3>${title}</h3>
+                    <p>${releasedYear}</p>
+                    <button type="button" data-url="${url}">Select</button>
+                </div>
+            `;
+
+            resultItem.querySelector('button').addEventListener('click', function() {
+                document.getElementById('animeUrl').value = `https://anitaku.pe${url}`;
+                document.getElementById('searchResults').innerHTML = ''; // Clear search results after selection
+            });
+
+            searchResultsContainer.appendChild(resultItem);
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        showError('An error occurred while searching. Please try again later.');
+    }
+}
+
 async function handleFetchDownloadLinks() {
     const animeUrl = document.getElementById('animeUrl').value.trim();
     const startEpisode = parseInt(document.getElementById('startEpisode').value);

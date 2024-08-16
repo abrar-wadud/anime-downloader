@@ -1,3 +1,5 @@
+/* Existing styles */
+
 :root {
     --main-bg-color: #000000;
     --text-color: #ffffff;
@@ -45,7 +47,8 @@ label {
 }
 
 input[type="url"],
-input[type="number"] {
+input[type="number"],
+input[type="text"] {
     width: 100%;
     padding: 10px;
     border: 1px solid var(--border-color);
@@ -130,4 +133,61 @@ input[type="number"] {
     border: 1px solid #d8000c;
     border-radius: 4px;
     margin-bottom: 10px;
+}
+
+/* New styles for search results */
+
+.search-results {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--border-color);
+    padding: 10px;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-img img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.result-info h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.result-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.result-info button {
+    background-color: var(--btn-bg-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.result-info button:hover {
+    background-color: var(--btn-bg-hover-color);
 }
