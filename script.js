@@ -22,6 +22,8 @@ document.getElementById('animeSearch').addEventListener('input', function() {
     }
 });
 
+let selectedAnimeUrl = ''; // Internal variable to store selected anime URL
+
 async function searchAnime(query) {
     const searchUrl = `https://anitaku.pe/search.html?keyword=${encodeURIComponent(query)}`;
     try {
@@ -57,9 +59,9 @@ async function searchAnime(query) {
             `;
 
             resultItem.querySelector('button').addEventListener('click', function() {
-                document.getElementById('animeUrl').value = `https://anitaku.pe${url}`;
-                document.getElementById('searchResults').innerHTML = ''; // Clear search results after selection
-                document.getElementById('searchResults').classList.add('hidden'); // Hide search results
+                selectedAnimeUrl = `https://anitaku.pe${url}`; // Save selected URL
+                searchResultsContainer.innerHTML = ''; // Clear search results after selection
+                searchResultsContainer.classList.add('hidden'); // Hide search results
             });
 
             searchResultsContainer.appendChild(resultItem);
@@ -71,12 +73,16 @@ async function searchAnime(query) {
 }
 
 async function handleFetchDownloadLinks() {
-    const animeUrl = document.getElementById('animeUrl').value.trim();
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
     const endEpisode = parseInt(document.getElementById('endEpisode').value);
 
     const errorContainer = document.getElementById('errorContainer');
     errorContainer.innerHTML = ''; // Clear previous errors
+
+    if (!selectedAnimeUrl) {
+        showError('Please select an anime from the search results.');
+        return;
+    }
 
     if (isNaN(startEpisode) || startEpisode < 1) {
         showError('Please enter a valid start episode number.');
@@ -97,7 +103,7 @@ async function handleFetchDownloadLinks() {
     document.getElementById('episodeList').innerHTML = '';
 
     try {
-        const episodeOptions = await fetchDownloadLinks(animeUrl, startEpisode, endEpisode);
+        const episodeOptions = await fetchDownloadLinks(selectedAnimeUrl, startEpisode, endEpisode);
         displayEpisodeList(episodeOptions);
     } catch (error) {
         console.error('Error:', error);
