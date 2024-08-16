@@ -1,78 +1,47 @@
-# Anime Downloader Web Application
+# Anime Download Link Fetcher
 
-Welcome to the Anime Downloader web application repository! This project provides a simple and efficient way to download anime episodes from various sources. With just a few clicks, users can specify the Anime URL, start episode, and end episode they want to download, and the application fetches the direct download links for the specified episodes.
-
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+Anime Download Link Fetcher is a user-friendly web application that allows users to search for anime, select episodes, and fetch download links for those episodes. This application is deployed on GitHub Pages and can be accessed [here](https://aw-tawsif.github.io/anime-downloader/).
 
 ## Features
 
-### Easy to Use
-The user interface is intuitive, providing a seamless experience for users to input the necessary details effortlessly. Clear labels and placeholders guide users through the process of specifying the Anime URL, start episode, and end episode.
+- **Anime Search**: Users can search for anime by title. The application provides search suggestions as the user types, making it easy to find the desired anime.
+- **Episode Selection**: Users can select the start and end episodes they want to download.
+- **Download Link Fetching**: The application fetches download links for the selected episodes from [Anitaku.pe](https://anitaku.pe/).
+- **Dark Mode**: The application supports dark mode for a comfortable viewing experience.
 
-### Fast and Efficient
-The application fetches episode details asynchronously, utilizing concurrent requests to ensure quick response times even for large episode ranges. This approach minimizes waiting times for users, enhancing the overall user experience.
+## Technologies Used
 
-### Error Handling
-Comprehensive error handling mechanisms are implemented to ensure that users are informed about any issues that may arise during the download process. Validation checks are performed on user input to detect and prompt users about invalid entries. Additionally, error messages are displayed prominently to guide users in resolving issues effectively.
-
-### Customizable Styling
-The application's appearance can be customized using CSS styles to match different preferences or branding requirements. Customization options include adjusting colors, fonts, layout, and other visual elements to create a personalized user interface.
-
-## Installation
-
-To run the Anime Downloader web application locally, follow these steps:
-
-1. **Clone the Repository**: Clone this repository to your local machine using the following command:
-
-   ```bash
-   git clone https://github.com/Dark0Echo/anime-downloader.git
-   ```
-
-2. **Navigate to the Project Directory**: Use the `cd` command to navigate to the project directory:
-
-   ```bash
-   cd anime-downloader
-   ```
-
-3. **Open the Application**: Open the `index.html` file in your preferred web browser to access the application.
+- **HTML**: Used for structuring the web pages.
+- **CSS**: Used for styling the web pages.
+- **JavaScript**: Used for handling user interactions and fetching data from the server.
 
 ## Usage
 
-1. **Open the Application**: Launch the application in your web browser by opening the `index.html` file.
-   
-2. **Input Anime Details**: Enter the Anime URL, start episode number, and end episode number in the respective input fields provided in the form.
-
-3. **The Anime URL**: Your anime url has to be from https://anitaku.pe/home.html this website or else it wouldn't work. Copy the url of the anime you want to download.
-
-4. **Initiate Download**: Click on the "Download Episodes" button to initiate the download process.
-
-5. **Download Episode(s)**: Once the download links are fetched, click on the episode links displayed to download the respective episodes. The download links open in a new tab/window for user convenience.
-
-## Usage without installation(github page)
-1. Use this website https://dark0echo.github.io/anime-downloader/
+1. Visit the [Anime Download Link Fetcher](https://aw-tawsif.github.io/anime-downloader/).
+2. Use the search bar to find the anime you're interested in.
+3. Select the anime from the search results.
+4. Enter the start and end episode numbers.
+5. Click the "Fetch Download Links" button.
+6. Wait for the download links to be fetched and displayed.
 
 ## Contributing
 
-Contributions to this project are welcome and encouraged! If you'd like to contribute, please follow these guidelines:
+Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
 
-1. **Fork the Repository**: Fork this repository to create your copy on GitHub.
-   
-2. **Create a New Branch**: Create a new branch for your feature or bug fix using a descriptive name.
-
-3. **Make Changes**: Implement your changes or additions, ensuring that the code adheres to the project's coding standards.
-
-4. **Commit Your Changes**: Commit your changes with clear and descriptive commit messages that explain the purpose of each change.
-
-5. **Push Changes**: Push your changes to your forked repository on GitHub.
-
-6. **Submit a Pull Request**: Submit a pull request from your branch to the `main` branch of the original repository. Provide a detailed description of your changes in the pull request.
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your changes to your fork.
+5. Submit a pull request.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE), which allows for free use, modification, and distribution of the software under certain conditions. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [Anitaku.pe](https://anitaku.pe/) for providing the anime data.
+
+## Contact
+
+If you have any questions or suggestions, feel free to contact me at [tawsif7492@gmail.com](mailto:tawsif7492@gmail.com).
