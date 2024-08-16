@@ -9,18 +9,21 @@ document.getElementById('animeForm').addEventListener('submit', event => {
     handleFetchDownloadLinks();
 });
 
+let debounceTimeout;
 document.getElementById('animeSearch').addEventListener('input', () => {
-    const query = document.getElementById('animeSearch').value.trim();
-    const searchResultsContainer = document.getElementById('searchResults');
-
-    if (query.length > 2) {
-        searchAnime(query);
-        searchResultsContainer.classList.remove('hidden');
-    } else {
-        searchResultsContainer.innerHTML = ''; // Clear search results if query is too short
-        searchResultsContainer.classList.add('hidden');
-    }
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+        const query = document.getElementById('animeSearch').value.trim();
+        if (query.length > 2) {
+            searchAnime(query);
+            document.getElementById('searchResults').classList.remove('hidden');
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+            document.getElementById('searchResults').classList.add('hidden');
+        }
+    }, 500); // 300ms delay
 });
+
 
 let selectedAnimeUrl = ''; // Internal variable to store selected anime URL
 
@@ -122,17 +125,17 @@ function showError(message) {
 async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode) {
     const episodeOptions = [];
     const concurrentRequests = 5;
-    const promises = [];
+    const queue = [];
 
     for (let episodeNumber = startEpisode; episodeNumber <= endEpisode; episodeNumber++) {
         const episodeUrl = changeUrlFormat(animeUrl, episodeNumber);
         const episodeTitle = `Episode ${episodeNumber}`;
-        promises.push(scrapeEpisodePage(episodeUrl, episodeTitle));
+        queue.push(scrapeEpisodePage(episodeUrl, episodeTitle));
 
-        if (promises.length >= concurrentRequests || episodeNumber === endEpisode) {
-            const results = await Promise.all(promises);
+        if (queue.length >= concurrentRequests || episodeNumber === endEpisode) {
+            const results = await Promise.all(queue);
             episodeOptions.push(...results.filter(link => link));
-            promises.length = 0;
+            queue.length = 0;
         }
     }
 
