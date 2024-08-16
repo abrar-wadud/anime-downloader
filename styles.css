@@ -1,5 +1,3 @@
-/* Existing styles */
-
 :root {
     --main-bg-color: #000000;
     --text-color: #ffffff;
@@ -76,9 +74,8 @@ input[type="text"] {
     background-color: var(--btn-bg-hover-color);
 }
 
-#loading {
+.loading {
     text-align: center;
-    display: none;
 }
 
 .loader {
@@ -135,8 +132,6 @@ input[type="text"] {
     margin-bottom: 10px;
 }
 
-/* New styles for search results */
-
 .search-results {
     max-height: 200px;
     overflow-y: auto;
@@ -190,8 +185,4 @@ input[type="text"] {
 
 .result-info button:hover {
     background-color: var(--btn-bg-hover-color);
-}
-
-.search-results.hidden {
-    display: none;
 }

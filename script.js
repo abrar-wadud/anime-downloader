@@ -1,16 +1,16 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     // Initialize page state
     document.getElementById('episodeList').classList.add('hidden');
     document.getElementById('searchResults').classList.add('hidden');
 });
 
-document.getElementById('animeForm').addEventListener('submit', function(event) {
+document.getElementById('animeForm').addEventListener('submit', event => {
     event.preventDefault();
     handleFetchDownloadLinks();
 });
 
-document.getElementById('animeSearch').addEventListener('input', function() {
-    const query = this.value.trim();
+document.getElementById('animeSearch').addEventListener('input', () => {
+    const query = document.getElementById('animeSearch').value.trim();
     const searchResultsContainer = document.getElementById('searchResults');
 
     if (query.length > 2) {
@@ -28,9 +28,7 @@ async function searchAnime(query) {
     const searchUrl = `https://anitaku.pe/search.html?keyword=${encodeURIComponent(query)}`;
     try {
         const response = await fetch(searchUrl);
-        if (!response.ok) {
-            throw new Error('Failed to retrieve search results. Status code: ' + response.status);
-        }
+        if (!response.ok) throw new Error(`Failed to retrieve search results. Status code: ${response.status}`);
         const html = await response.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const items = doc.querySelectorAll('.items li');
@@ -99,7 +97,7 @@ async function handleFetchDownloadLinks() {
         return;
     }
 
-    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').classList.remove('hidden');
     document.getElementById('episodeList').innerHTML = '';
 
     try {
@@ -109,7 +107,7 @@ async function handleFetchDownloadLinks() {
         console.error('Error:', error);
         showError('An error occurred while fetching episode links. Please try again later.');
     } finally {
-        document.getElementById('loading').style.display = 'none';
+        document.getElementById('loading').classList.add('hidden');
     }
 }
 
@@ -144,9 +142,7 @@ async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode) {
 async function scrapeEpisodePage(url, episodeTitle) {
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Failed to retrieve the webpage. Status code: ' + response.status);
-        }
+        if (!response.ok) throw new Error(`Failed to retrieve the webpage. Status code: ${response.status}`);
         const html = await response.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const downloadLink = doc.querySelector('.favorites_book a[href^="http"]')?.getAttribute('href');
@@ -160,26 +156,22 @@ async function scrapeEpisodePage(url, episodeTitle) {
 
 function displayEpisodeList(episodeOptions) {
     const episodeListContainer = document.getElementById('episodeList');
-    episodeListContainer.innerHTML = '';
+    episodeListContainer.innerHTML = ''; // Clear previous content
 
+    const fragment = document.createDocumentFragment();
     episodeOptions.forEach(episode => {
         const episodeItem = document.createElement('div');
         episodeItem.classList.add('episode-item');
         episodeItem.innerHTML = `<a href="${episode.downloadLink}" target="_blank">${episode.title}</a>`;
-        episodeListContainer.appendChild(episodeItem);
-
-        // Add click event listener to the episode item
-        episodeItem.addEventListener('click', function() {
-            this.classList.add('clicked');
-        });
+        fragment.appendChild(episodeItem);
     });
-
-    episodeListContainer.classList.remove('hidden'); // Ensure episode list is visible
+    episodeListContainer.appendChild(fragment);
+    episodeListContainer.classList.remove('hidden');
 }
+
 
 function changeUrlFormat(animeUrl, episodeNumber) {
     const base_url = animeUrl.split('category/')[0];
     const anime_title = animeUrl.split('/').pop();
-    const episodeUrl = base_url + anime_title + '-episode-' + episodeNumber;
-    return episodeUrl;
+    return `${base_url}${anime_title}-episode-${episodeNumber}`;
 }
