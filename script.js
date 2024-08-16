@@ -21,11 +21,11 @@ document.getElementById('animeSearch').addEventListener('input', () => {
             document.getElementById('searchResults').innerHTML = '';
             document.getElementById('searchResults').classList.add('hidden');
         }
-    }, 500); // 300ms delay
+    }, 500); // 500ms delay
 });
 
-
 let selectedAnimeUrl = ''; // Internal variable to store selected anime URL
+let selectedAnimeTitle = ''; // Internal variable to store selected anime title with year
 
 async function searchAnime(query) {
     const searchUrl = `https://anitaku.pe/search.html?keyword=${encodeURIComponent(query)}`;
@@ -55,14 +55,16 @@ async function searchAnime(query) {
                 <div class="result-info">
                     <h3>${title}</h3>
                     <p>${releasedYear}</p>
-                    <button type="button" data-url="${url}">Select</button>
+                    <button type="button" data-url="${url}" data-title="${title}" data-year="${releasedYear}">Select</button>
                 </div>
             `;
 
             resultItem.querySelector('button').addEventListener('click', function() {
                 selectedAnimeUrl = `https://anitaku.pe${url}`; // Save selected URL
-                searchResultsContainer.innerHTML = ''; // Clear search results after selection
-                searchResultsContainer.classList.add('hidden'); // Hide search results
+                selectedAnimeTitle = `${this.getAttribute('data-title')} (${this.getAttribute('data-year')})`; // Save selected title with year
+                document.getElementById('animeSearch').value = selectedAnimeTitle; // Update search input field
+                document.getElementById('searchResults').innerHTML = ''; // Clear search results after selection
+                document.getElementById('searchResults').classList.add('hidden'); // Hide search results
             });
 
             searchResultsContainer.appendChild(resultItem);
@@ -171,7 +173,6 @@ function displayEpisodeList(episodeOptions) {
     episodeListContainer.appendChild(fragment);
     episodeListContainer.classList.remove('hidden');
 }
-
 
 function changeUrlFormat(animeUrl, episodeNumber) {
     const base_url = animeUrl.split('category/')[0];
