@@ -11,7 +11,7 @@
         <header>
             <h1>Anime Download Link Fetcher</h1>
         </header>
-        <form id="animeForm">
+        <form id="animeForm" autocomplete="off">
             <section class="form-group">
                 <label for="animeSearch">Search Anime</label>
                 <input type="text" id="animeSearch" name="animeSearch" placeholder="Search for an anime">
@@ -29,7 +29,11 @@
             <button type="submit" class="btn">Fetch Download Links</button>
         </form>
         <div id="loading" class="loading hidden">
-            <div class="loader"></div>
+            <div class="bouncing-dots">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
             <p>Loading...</p>
         </div>
         <div id="episodeList" class="episode-list hidden"></div>

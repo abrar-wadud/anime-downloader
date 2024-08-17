@@ -29,14 +29,19 @@ let selectedAnimeTitle = ''; // Internal variable to store selected anime title 
 
 async function searchAnime(query) {
     const searchUrl = `https://anitaku.pe/search.html?keyword=${encodeURIComponent(query)}`;
+    const searchResultsContainer = document.getElementById('searchResults');
+
+    // Show loading animation
+    searchResultsContainer.innerHTML = '<div id="loading" class="loading"><div class="bouncing-dots"><div></div><div></div><div></div></div><p>Loading...</p></div>';
+    searchResultsContainer.classList.remove('hidden');
+
     try {
         const response = await fetch(searchUrl);
         if (!response.ok) throw new Error(`Failed to retrieve search results. Status code: ${response.status}`);
         const html = await response.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const items = doc.querySelectorAll('.items li');
-        
-        const searchResultsContainer = document.getElementById('searchResults');
+
         searchResultsContainer.innerHTML = ''; // Clear previous results
 
         if (items.length === 0) {
@@ -72,15 +77,15 @@ async function searchAnime(query) {
 
                 searchResultsContainer.appendChild(resultItem);
             });
-            searchResultsContainer.classList.remove('hidden');
         }
     } catch (error) {
         console.error('Error:', error);
-        showError('An error occurred while searching. Please try again later.');
+        searchResultsContainer.innerHTML = '<p>An error occurred while searching. Please try again later.</p>';
+    } finally {
+        // Hide loading animation
+        searchResultsContainer.classList.remove('hidden');
     }
 }
-
-
 
 async function handleFetchDownloadLinks() {
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
