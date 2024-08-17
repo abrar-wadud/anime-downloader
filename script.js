@@ -8,23 +8,45 @@ document.getElementById('animeForm').addEventListener('submit', event => {
     handleFetchDownloadLinks();
 });
 
+// Function to clear the selected anime display
+function clearSelectedAnime() {
+    const selectedAnime = document.getElementById('selectedAnime');
+    selectedAnime.classList.add('hidden');
+}
+
 let debounceTimeout;
+// Event listener for the search input
 document.getElementById('animeSearch').addEventListener('input', () => {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
         const query = document.getElementById('animeSearch').value.trim();
         if (query.length > 0) {
+            clearSelectedAnime(); // Clear previous selection when a new search starts
             searchAnime(query);
             document.getElementById('searchResults').classList.remove('hidden');
         } else {
             document.getElementById('searchResults').innerHTML = '';
             document.getElementById('searchResults').classList.add('hidden');
+            clearSelectedAnime(); // Clear selection when search query is empty
         }
     }, 500); // 500ms delay
 });
 
+function showSelectedAnime(title, year, imgSrc) {
+    const selectedAnimeTitle = document.getElementById('selectedAnimeTitle');
+    const selectedAnimeYear = document.getElementById('selectedAnimeYear');
+    const selectedAnimeImage = document.getElementById('selectedAnimeImage');
+    const selectedAnime = document.getElementById('selectedAnime');
+    
+    selectedAnimeTitle.textContent = title;
+    selectedAnimeYear.textContent = `Released: ${year}`;
+    selectedAnimeImage.src = imgSrc;
+    selectedAnime.classList.remove('hidden');
+}
+
 let selectedAnimeUrl = '';
 
+// Function to handle search and update search results
 async function searchAnime(query) {
     const searchUrl = `https://anitaku.pe/search.html?keyword=${encodeURIComponent(query)}`;
     const searchResultsContainer = document.getElementById('searchResults');
@@ -63,6 +85,9 @@ async function searchAnime(query) {
                 const resultItem = document.createElement('div');
                 resultItem.classList.add('result-item');
                 resultItem.dataset.url = `https://anitaku.pe${url}`;
+                resultItem.dataset.title = title;
+                resultItem.dataset.year = releasedYear;
+                resultItem.dataset.imgSrc = imgSrc;
                 resultItem.innerHTML = `
                     <div class="result-img">
                         <img src="${imgSrc}" alt="${title}">
@@ -74,8 +99,9 @@ async function searchAnime(query) {
                 `;
 
                 resultItem.addEventListener('click', function() {
+                    const { title, year, imgSrc } = this.dataset;
+                    showSelectedAnime(title, year, imgSrc);
                     selectedAnimeUrl = this.dataset.url;
-                    document.getElementById('animeSearch').value = `${title} (${releasedYear})`;
                     searchResultsContainer.innerHTML = '';
                     searchResultsContainer.classList.add('hidden');
                 });
@@ -90,6 +116,7 @@ async function searchAnime(query) {
         searchResultsContainer.classList.remove('hidden');
     }
 }
+
 
 async function handleFetchDownloadLinks() {
     const startEpisode = parseInt(document.getElementById('startEpisode').value);

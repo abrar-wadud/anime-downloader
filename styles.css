@@ -222,3 +222,41 @@ input[type="text"] {
 .result-info button:hover {
     background-color: var(--btn-bg-hover-color);
 }
+
+.selected-anime {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.selected-anime-content {
+    display: flex;
+    align-items: center;
+}
+
+.selected-anime img {
+    max-width: 120px;
+    max-height: 180px;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+#selectedAnimeInfo {
+    flex-grow: 1;
+}
+
+#selectedAnimeTitle {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#selectedAnimeYear {
+    margin: 5px 0;
+    font-size: 16px;
+    color: var(--text-color);
+}

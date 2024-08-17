@@ -15,6 +15,15 @@
             <section class="form-group">
                 <label for="animeSearch">Search Anime</label>
                 <input type="text" id="animeSearch" name="animeSearch" placeholder="Search for an anime">
+                <div id="selectedAnime" class="selected-anime hidden">
+                    <div id="selectedAnimeContent" class="selected-anime-content">
+                        <img id="selectedAnimeImage" src="" alt="Selected Anime">
+                        <div id="selectedAnimeInfo">
+                            <h2 id="selectedAnimeTitle"></h2>
+                            <p id="selectedAnimeYear"></p>
+                        </div>
+                    </div>
+                </div>                
                 <div id="searchResults" class="search-results hidden"></div>
             </section>
             <section class="form-group">
