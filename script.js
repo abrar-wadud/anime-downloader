@@ -117,7 +117,6 @@ async function searchAnime(query) {
     }
 }
 
-
 async function handleFetchDownloadLinks() {
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
     const endEpisode = parseInt(document.getElementById('endEpisode').value);
@@ -212,6 +211,9 @@ function displayEpisodeList(episodeOptions) {
         episodeItem.classList.add('episode-item');
         episodeItem.innerHTML = `<a href="${episode.downloadLink}" target="_blank">${episode.title}</a>`;
         fragment.appendChild(episodeItem);
+        episodeItem.addEventListener('click', function() {
+            episodeItem.classList.add('clicked');
+        });
     });
     episodeListContainer.appendChild(fragment);
     episodeListContainer.classList.remove('hidden');
