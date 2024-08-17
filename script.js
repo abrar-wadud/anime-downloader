@@ -39,7 +39,7 @@ function showSelectedAnime(title, year, imgSrc) {
     const selectedAnime = document.getElementById('selectedAnime');
     
     selectedAnimeTitle.textContent = title;
-    selectedAnimeYear.textContent = `Released: ${year}`;
+    selectedAnimeYear.textContent = `${year}`;
     selectedAnimeImage.src = imgSrc;
     selectedAnime.classList.remove('hidden');
 }
