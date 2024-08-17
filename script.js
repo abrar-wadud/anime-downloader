@@ -39,40 +39,47 @@ async function searchAnime(query) {
         const searchResultsContainer = document.getElementById('searchResults');
         searchResultsContainer.innerHTML = ''; // Clear previous results
 
-        items.forEach(item => {
-            const titleElement = item.querySelector('.name a');
-            const title = titleElement.textContent.trim();
-            const url = titleElement.getAttribute('href');
-            const imgSrc = item.querySelector('.img img').getAttribute('src');
-            const releasedYear = item.querySelector('.released').textContent.trim();
+        if (items.length === 0) {
+            // Display a message if no results are found
+            searchResultsContainer.innerHTML = '<p>No results found.</p>';
+        } else {
+            items.forEach(item => {
+                const titleElement = item.querySelector('.name a');
+                const title = titleElement.textContent.trim();
+                const url = titleElement.getAttribute('href');
+                const imgSrc = item.querySelector('.img img').getAttribute('src');
+                const releasedYear = item.querySelector('.released').textContent.trim();
 
-            const resultItem = document.createElement('div');
-            resultItem.classList.add('result-item');
-            resultItem.innerHTML = `
-                <div class="result-img">
-                    <img src="${imgSrc}" alt="${title}">
-                </div>
-                <div class="result-info">
-                    <h3>${title}</h3>
-                    <p>${releasedYear}</p>
-                    <button type="button" data-url="${url}">Select</button>
-                </div>
-            `;
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('result-item');
+                resultItem.innerHTML = `
+                    <div class="result-img">
+                        <img src="${imgSrc}" alt="${title}">
+                    </div>
+                    <div class="result-info">
+                        <h3>${title}</h3>
+                        <p>${releasedYear}</p>
+                        <button type="button" data-url="${url}">Select</button>
+                    </div>
+                `;
 
-            resultItem.querySelector('button').addEventListener('click', function() {
-                selectedAnimeUrl = `https://anitaku.pe${url}`; // Save selected URL
-                document.getElementById('animeSearch').value = `${title} (${releasedYear})`; // Update input field
-                searchResultsContainer.innerHTML = ''; // Clear search results after selection
-                searchResultsContainer.classList.add('hidden'); // Hide search results
+                resultItem.querySelector('button').addEventListener('click', function() {
+                    selectedAnimeUrl = `https://anitaku.pe${url}`; // Save selected URL
+                    document.getElementById('animeSearch').value = `${title} (${releasedYear})`; // Update input field
+                    searchResultsContainer.innerHTML = ''; // Clear search results after selection
+                    searchResultsContainer.classList.add('hidden'); // Hide search results
+                });
+
+                searchResultsContainer.appendChild(resultItem);
             });
-
-            searchResultsContainer.appendChild(resultItem);
-        });
+            searchResultsContainer.classList.remove('hidden');
+        }
     } catch (error) {
         console.error('Error:', error);
         showError('An error occurred while searching. Please try again later.');
     }
 }
+
 
 
 async function handleFetchDownloadLinks() {
