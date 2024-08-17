@@ -116,7 +116,7 @@ input[type="text"] {
 }
 
 .episode-item.clicked a {
-    color: var(--clicked-item-color);
+    opacity: 0.6;
 }
 
 .error-container {
