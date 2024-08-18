@@ -32,13 +32,15 @@ document.getElementById('animeSearch').addEventListener('input', () => {
     }, 500); // 500ms delay
 });
 
-function showSelectedAnime(title, year, imgSrc) {
+function showSelectedAnime(title, year, imgSrc, episodeCount) {
     const selectedAnimeTitle = document.getElementById('selectedAnimeTitle');
     const selectedAnimeYear = document.getElementById('selectedAnimeYear');
     const selectedAnimeImage = document.getElementById('selectedAnimeImage');
     const selectedAnime = document.getElementById('selectedAnime');
+    const selectedepisodeCount = document.getElementById('selectedepisodeCount')
     
     selectedAnimeTitle.textContent = title;
+    selectedepisodeCount.textContent = `${episodeCount} ${episodeCount === 1 ? 'Episode' : 'Episodes'}`;
     selectedAnimeYear.textContent = `${year}`;
     selectedAnimeImage.src = imgSrc;
     selectedAnime.classList.remove('hidden');
@@ -104,8 +106,8 @@ async function searchAnime(query) {
                 `;
 
                 resultItem.addEventListener('click', function() {
-                    const { title, year, imgSrc } = this.dataset;
-                    showSelectedAnime(title, year, imgSrc);
+                    const { title, year, imgSrc, episodeCount } = this.dataset;
+                    showSelectedAnime(title, year, imgSrc, episodeCount);
                     selectedAnimeUrl = this.dataset.url;
                     searchResultsContainer.innerHTML = '';
                     searchResultsContainer.classList.add('hidden');
