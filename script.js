@@ -75,12 +75,15 @@ async function searchAnime(query) {
         if (items.length === 0) {
             searchResultsContainer.innerHTML = '<p>No results found.</p>';
         } else {
-            items.forEach(item => {
+            items.forEach(async item => {
                 const titleElement = item.querySelector('.name a');
                 const title = titleElement.textContent.trim();
                 const url = titleElement.getAttribute('href');
                 const imgSrc = item.querySelector('.img img').getAttribute('src');
                 const releasedYear = item.querySelector('.released').textContent.trim();
+
+                // Fetch additional information about episodes
+                const episodeCount = await fetchEpisodeCount(`https://anitaku.pe${url}`);
 
                 const resultItem = document.createElement('div');
                 resultItem.classList.add('result-item');
@@ -88,6 +91,7 @@ async function searchAnime(query) {
                 resultItem.dataset.title = title;
                 resultItem.dataset.year = releasedYear;
                 resultItem.dataset.imgSrc = imgSrc;
+                resultItem.dataset.episodeCount = episodeCount; // Store episode count
                 resultItem.innerHTML = `
                     <div class="result-img">
                         <img src="${imgSrc}" alt="${title}">
@@ -95,6 +99,7 @@ async function searchAnime(query) {
                     <div class="result-info">
                         <h3>${title}</h3>
                         <p>${releasedYear}</p>
+                        <p>${episodeCount} ${episodeCount === 1 ? 'Episode' : 'Episodes'}</p>
                     </div>
                 `;
 
@@ -114,6 +119,30 @@ async function searchAnime(query) {
         searchResultsContainer.innerHTML = '<p>An error occurred while searching. Please try again later.</p>';
     } finally {
         searchResultsContainer.classList.remove('hidden');
+    }
+}
+
+async function fetchEpisodeCount(animeUrl) {
+    try {
+        const response = await fetch(animeUrl);
+        if (!response.ok) throw new Error(`Failed to retrieve the webpage. Status code: ${response.status}`);
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const episodePageLinks = doc.querySelectorAll('#episode_page a');
+        let maxEpisode = 0;
+
+        episodePageLinks.forEach(link => {
+            const epStart = parseInt(link.getAttribute('ep_start'));
+            const epEnd = parseInt(link.getAttribute('ep_end'));
+            if (epEnd > maxEpisode) {
+                maxEpisode = epEnd;
+            }
+        });
+
+        return maxEpisode;
+    } catch (error) {
+        console.error('Error occurred during request:', error);
+        return 'Unknown'; // Default value in case of an error
     }
 }
 
