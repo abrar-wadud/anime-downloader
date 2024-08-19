@@ -1,6 +1,6 @@
 # Anime Download Link Fetcher
 
-Anime Download Link Fetcher is a user-friendly web application that allows users to search for anime, select episodes, and fetch download links for those episodes. This application is deployed on GitHub Pages and can be accessed [here](https://aw-tawsif.github.io/anime-downloader/).
+Anime Download Link Fetcher is a user-friendly web application that allows users to search for anime, select episodes, and fetch download links for those episodes. This application is deployed on GitHub Pages and can be accessed [here](https://abrar-wadud.github.io/anime-downloader/).
 
 ## Features
 
@@ -17,7 +17,7 @@ Anime Download Link Fetcher is a user-friendly web application that allows users
 
 ## Usage
 
-1. Visit the [Anime Download Link Fetcher](https://aw-tawsif.github.io/anime-downloader/).
+1. Visit the [Anime Download Link Fetcher](https://abrar-wadud.github.io/anime-downloader/).
 2. Use the search bar to find the anime you're interested in.
 3. Select the anime from the search results.
 4. Enter the start and end episode numbers.
