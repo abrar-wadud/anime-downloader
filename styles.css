@@ -127,7 +127,6 @@ input[type="text"] {
 
 .episode-list {
     overflow-y: auto;
-    max-height: 280px;
 }
 
 .episode-item {
@@ -173,7 +172,6 @@ input[type="text"] {
     border-radius: 12px;
     padding: 7px;
     background-color: var(--main-bg-color);
-    max-height: 330px; /* Ensure it doesn’t grow too large */
 }
 
 /* Card style for each search result item */
