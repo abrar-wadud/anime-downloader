@@ -96,7 +96,7 @@ async function searchAnime(query) {
                 resultItem.dataset.episodeCount = episodeCount; // Store episode count
                 resultItem.innerHTML = `
                     <div class="result-img">
-                        <img src="${imgSrc}" alt="${title}">
+                        <img src="${imgSrc}" alt="${title}" loading="lazy"> <!-- Lazy loading enabled -->
                     </div>
                     <div class="result-info">
                         <h3>${title}</h3>
@@ -148,6 +148,23 @@ async function fetchEpisodeCount(animeUrl) {
     }
 }
 
+function validateEpisodeNumbers(startEpisode, endEpisode) {
+    const minEpisode = 1; // minimum allowed episode number
+    if (startEpisode < minEpisode) {
+        showError(`Start episode number cannot be less than ${minEpisode}.`);
+        return false;
+    }
+    if (endEpisode < minEpisode) {
+        showError(`End episode number cannot be less than ${minEpisode}.`);
+        return false;
+    }
+    if (startEpisode > endEpisode) {
+        showError('Start episode number must be less than or equal to the end episode number.');
+        return false;
+    }
+    return true;
+}
+
 async function handleFetchDownloadLinks() {
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
     const endEpisode = parseInt(document.getElementById('endEpisode').value);
@@ -155,23 +172,12 @@ async function handleFetchDownloadLinks() {
     const errorContainer = document.getElementById('errorContainer');
     errorContainer.innerHTML = '';
 
+    if (!validateEpisodeNumbers(startEpisode, endEpisode)) {
+        return;
+    }
+
     if (!selectedAnimeUrl) {
         showError('Please select an anime from the search results.');
-        return;
-    }
-
-    if (isNaN(startEpisode) || startEpisode < 1) {
-        showError('Please enter a valid start episode number.');
-        return;
-    }
-
-    if (isNaN(endEpisode) || endEpisode < 1) {
-        showError('Please enter a valid end episode number.');
-        return;
-    }
-
-    if (startEpisode > endEpisode) {
-        showError('Start episode number must be less than or equal to end episode number.');
         return;
     }
 
@@ -197,27 +203,68 @@ function showError(message) {
     errorContainer.appendChild(errorItem);
 }
 
+// Function to determine the number of concurrent requests based on network speed
+function getConcurrentRequestsBasedOnNetwork() {
+    if ('connection' in navigator) {
+        const effectiveType = navigator.connection.effectiveType;
+        switch (effectiveType) {
+            case '4g':
+                return 5; // Good network, allow more concurrent requests
+            case '3g':
+                return 3; // Moderate network, reduce concurrent requests
+            case '2g':
+            case 'slow-2g':
+                return 1; // Poor network, minimize concurrent requests
+            default:
+                return 5; // Default to 5 if no network info is available
+        }
+    }
+    return 5; // Default if Network Information API is not supported
+}
+
 async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode) {
     const episodeOptions = [];
-    const concurrentRequests = 5;
+    const concurrentRequests = getConcurrentRequestsBasedOnNetwork(); // Dynamically set based on network
     const queue = [];
+    const totalEpisodes = endEpisode - startEpisode + 1;
+    let fetchedEpisodes = 0;
+
+    // Show progress bar
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    progressContainer.classList.remove('hidden');
 
     for (let episodeNumber = startEpisode; episodeNumber <= endEpisode; episodeNumber++) {
         const episodeUrl = changeUrlFormat(animeUrl, episodeNumber);
         const episodeTitle = `Episode ${episodeNumber}`;
-        queue.push(scrapeEpisodePage(episodeUrl, episodeTitle));
+        queue.push(scrapeEpisodePage(episodeUrl, episodeTitle, episodeNumber).then(result => {
+            if (result) episodeOptions.push(result);
+            fetchedEpisodes++;
+            updateProgressBar(fetchedEpisodes, totalEpisodes, progressBar);
+        }));
 
         if (queue.length >= concurrentRequests || episodeNumber === endEpisode) {
-            const results = await Promise.all(queue);
-            episodeOptions.push(...results.filter(link => link));
+            await Promise.all(queue);
             queue.length = 0;
         }
     }
 
+    // Sort episodeOptions by episodeNumber before returning
+    episodeOptions.sort((a, b) => a.episodeNumber - b.episodeNumber);
+
+    // Hide progress bar when done
+    progressContainer.classList.add('hidden');
+
     return episodeOptions;
 }
 
-async function scrapeEpisodePage(url, episodeTitle) {
+// Function to update the progress bar
+function updateProgressBar(fetchedEpisodes, totalEpisodes, progressBar) {
+    const progressPercentage = (fetchedEpisodes / totalEpisodes) * 100;
+    progressBar.style.width = `${progressPercentage}%`;
+}
+
+async function scrapeEpisodePage(url, episodeTitle, episodeNumber) {
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Failed to retrieve the webpage. Status code: ${response.status}`);
@@ -225,7 +272,7 @@ async function scrapeEpisodePage(url, episodeTitle) {
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const downloadLink = doc.querySelector('.favorites_book a[href^="http"]')?.getAttribute('href');
 
-        return { title: episodeTitle, downloadLink: downloadLink || null };
+        return { title: episodeTitle, downloadLink: downloadLink || null, episodeNumber };  // Include episode number
     } catch (error) {
         console.error('Error occurred during request:', error);
         return null;
