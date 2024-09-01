@@ -79,7 +79,9 @@ input[type="text"] {
     text-align: center;
     padding: 20px;
 }
-
+#loading p {
+    margin-top: 0;
+}
 .bouncing-dots {
     display: flex;
     justify-content: center;
