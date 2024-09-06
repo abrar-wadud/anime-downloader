@@ -281,7 +281,14 @@ input[type="text"] {
 .progress-bar {
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, #020344ff, #061754ff, #0A2B64ff, #0F3F74ff, #135384ff, #176895ff, #1B7CA5ff, #2090B5ff, #24A4C5ff, #28B8D5ff);
+    background: linear-gradient(90deg, #040466ff, #041676ff, #042986ff, #043C97ff, #044EA7ff, #0461B7ff, #0473C7ff);
     transition: width 0.4s ease;
     border-radius: 5px;
+}
+
+/* Hide the number input spinner arrows in all browsers */
+input[type="number"] {
+    appearance: textfield; /* Standard appearance property */
+    -webkit-appearance: none; /* Vendor prefix for WebKit-based browsers */
+    -moz-appearance: textfield; /* Vendor prefix for Firefox */
 }

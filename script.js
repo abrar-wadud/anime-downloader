@@ -29,7 +29,7 @@ document.getElementById('animeSearch').addEventListener('input', () => {
             document.getElementById('searchResults').classList.add('hidden');
             clearSelectedAnime(); // Clear selection when search query is empty
         }
-    }, 500); // 500ms delay
+    }, 750); // 750ms delay
 });
 
 function showSelectedAnime(title, year, imgSrc, episodeCount) {
