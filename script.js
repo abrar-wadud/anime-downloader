@@ -50,7 +50,7 @@ let selectedAnimeUrl = '';
 
 // Function to handle search and update search results
 async function searchAnime(query) {
-    const searchUrl = `https://anitaku.pe/search.html?keyword=${encodeURIComponent(query)}`;
+    const searchUrl = `https://anitaku.bz/search.html?keyword=${encodeURIComponent(query)}`;
     const searchResultsContainer = document.getElementById('searchResults');
 
     searchResultsContainer.innerHTML = `
@@ -85,11 +85,11 @@ async function searchAnime(query) {
                 const releasedYear = item.querySelector('.released').textContent.trim();
 
                 // Fetch additional information about episodes
-                const episodeCount = await fetchEpisodeCount(`https://anitaku.pe${url}`);
+                const episodeCount = await fetchEpisodeCount(`https://anitaku.bz${url}`);
 
                 const resultItem = document.createElement('div');
                 resultItem.classList.add('result-item');
-                resultItem.dataset.url = `https://anitaku.pe${url}`;
+                resultItem.dataset.url = `https://anitaku.bz${url}`;
                 resultItem.dataset.title = title;
                 resultItem.dataset.year = releasedYear;
                 resultItem.dataset.imgSrc = imgSrc;
@@ -203,28 +203,9 @@ function showError(message) {
     errorContainer.appendChild(errorItem);
 }
 
-// Function to determine the number of concurrent requests based on network speed
-function getConcurrentRequestsBasedOnNetwork() {
-    if ('connection' in navigator) {
-        const effectiveType = navigator.connection.effectiveType;
-        switch (effectiveType) {
-            case '4g':
-                return 5; // Good network, allow more concurrent requests
-            case '3g':
-                return 3; // Moderate network, reduce concurrent requests
-            case '2g':
-            case 'slow-2g':
-                return 1; // Poor network, minimize concurrent requests
-            default:
-                return 5; // Default to 5 if no network info is available
-        }
-    }
-    return 5; // Default if Network Information API is not supported
-}
-
 async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode) {
     const episodeOptions = [];
-    const concurrentRequests = getConcurrentRequestsBasedOnNetwork(); // Dynamically set based on network
+    const concurrentRequests = 5; // Dynamically set based on network
     const queue = [];
     const totalEpisodes = endEpisode - startEpisode + 1;
     let fetchedEpisodes = 0;
