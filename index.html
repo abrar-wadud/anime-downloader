@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Download Link Fetcher</title>
+    <title>Anime Downloader</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="animate.png">
 </head>
 <body class="dark-mode">
     <main class="container">
         <header>
-            <h1>Anime Download Link Fetcher</h1>
+            <h1>Anime Downloader</h1>
         </header>
         <form id="animeForm" autocomplete="off">
             <section class="form-group">
@@ -30,11 +30,11 @@
             </section>
             <section class="form-group">
                 <label for="startEpisode">Start Episode</label>
-                <input type="number" id="startEpisode" name="startEpisode" placeholder="Start episode number" required min="1" step="1">
+                <input type="number" id="startEpisode" name="startEpisode" placeholder="Start episode number" required min="1">
             </section>
             <section class="form-group">
                 <label for="endEpisode">End Episode</label>
-                <input type="number" id="endEpisode" name="endEpisode" placeholder="End episode number" required min="1" step="1">
+                <input type="number" id="endEpisode" name="endEpisode" placeholder="End episode number" required min="1">
             </section>
             <section class="form-group">
                 <label for="resolution">Select Resolution</label>
@@ -46,7 +46,7 @@
                 </select>
             </section>            
             <div id="errorContainer" class="error-container"></div>
-            <button type="submit" class="btn">Fetch Download Links</button>
+            <button type="submit" class="btn">Download</button>
         </form>
         <div id="loading" class="hidden">
             <p>Loading...</p>
