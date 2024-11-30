@@ -296,10 +296,13 @@ input[type="text"] {
 }
 
 /* Hide the number input spinner arrows in all browsers */
-input[type="number"] {
-    appearance: textfield; /* Standard appearance property */
-    -webkit-appearance: none; /* Vendor prefix for WebKit-based browsers */
-    -moz-appearance: textfield; /* Vendor prefix for Firefox */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    appearance:textfield; /* Firefox */
 }
 
 /* Hide scrollbars across different browsers */
