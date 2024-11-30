@@ -36,6 +36,15 @@
                 <label for="endEpisode">End Episode</label>
                 <input type="number" id="endEpisode" name="endEpisode" placeholder="End episode number" required min="1" step="1">
             </section>
+            <section class="form-group">
+                <label for="resolution">Select Resolution</label>
+                <select id="resolution" name="resolution" required>
+                    <option value="1080">1080p</option>
+                    <option value="720">720p</option>
+                    <option value="480">480p</option>
+                    <option value="360">360p</option>
+                </select>
+            </section>            
             <div id="errorContainer" class="error-container"></div>
             <button type="submit" class="btn">Fetch Download Links</button>
         </form>

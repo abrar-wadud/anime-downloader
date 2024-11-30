@@ -168,6 +168,7 @@ function validateEpisodeNumbers(startEpisode, endEpisode) {
 async function handleFetchDownloadLinks() {
     const startEpisode = parseInt(document.getElementById('startEpisode').value);
     const endEpisode = parseInt(document.getElementById('endEpisode').value);
+    const preferredResolution = document.getElementById('resolution').value + 'P';
 
     const errorContainer = document.getElementById('errorContainer');
     errorContainer.innerHTML = '';
@@ -185,7 +186,7 @@ async function handleFetchDownloadLinks() {
     document.getElementById('episodeList').innerHTML = '';
 
     try {
-        const episodeOptions = await fetchDownloadLinks(selectedAnimeUrl, startEpisode, endEpisode);
+        const episodeOptions = await fetchDownloadLinks(selectedAnimeUrl, startEpisode, endEpisode, preferredResolution);
         displayEpisodeList(episodeOptions);
     } catch (error) {
         console.error('Error:', error);
@@ -203,7 +204,7 @@ function showError(message) {
     errorContainer.appendChild(errorItem);
 }
 
-async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode) {
+async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode, preferredResolution) {
     const episodeOptions = [];
     const concurrentRequests = 5; // Dynamically set based on network
     const queue = [];
@@ -218,7 +219,7 @@ async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode) {
     for (let episodeNumber = startEpisode; episodeNumber <= endEpisode; episodeNumber++) {
         const episodeUrl = changeUrlFormat(animeUrl, episodeNumber);
         const episodeTitle = `Episode ${episodeNumber}`;
-        queue.push(scrapeEpisodePage(episodeUrl, episodeTitle, episodeNumber).then(result => {
+        queue.push(scrapeEpisodePage(episodeUrl, episodeTitle, episodeNumber, preferredResolution).then(result => {
             if (result) episodeOptions.push(result);
             fetchedEpisodes++;
             updateProgressBar(fetchedEpisodes, totalEpisodes, progressBar);
@@ -245,18 +246,75 @@ function updateProgressBar(fetchedEpisodes, totalEpisodes, progressBar) {
     progressBar.style.width = `${progressPercentage}%`;
 }
 
-async function scrapeEpisodePage(url, episodeTitle, episodeNumber) {
+async function scrapeEpisodePage(url, episodeTitle, episodeNumber, preferredResolution) {
     try {
+        // Step 1: Fetch the initial download page link
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Failed to retrieve the webpage. Status code: ${response.status}`);
+        
         const html = await response.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
-        const downloadLink = doc.querySelector('.favorites_book a[href^="http"]')?.getAttribute('href');
+        const downloadPageLink = doc.querySelector('.favorites_book a[href^="http"]')?.getAttribute('href');
+        
+        if (!downloadPageLink) {
+            return { title: episodeTitle, downloadLink: null, episodeNumber };
+        }
 
-        return { title: episodeTitle, downloadLink: downloadLink || null, episodeNumber };  // Include episode number
+        // Step 2: Extract the `id` parameter from the link
+        const urlParams = new URLSearchParams(new URL(downloadPageLink).search);
+        const id = urlParams.get('id');
+        if (!id) {
+            return { title: episodeTitle, downloadLink: null, episodeNumber };
+        }
+
+        // Step 3: Fetch the final download links using the extracted `id`
+        const postResponse = await fetch("https://web-production-af65.up.railway.app/https://s3embtaku.pro/download", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "Accept": "*/*"
+            },
+            body: `captcha_v3=03AFcWeA53xXdH1eEwxRn1DxZB7SrwJEzwT9T4ROw7wKvG2cjGov-BGpdUN1DoxyptuaMmuuADTQZeUGB13RrF18Zz6ZX_SdRy6W4S_G4WPUzqzhCgjrPil-W4Gtt7QU8jR3T49HVK-PxxliowX1q-mcplhKLYdb7Qd_V3vY0RZFcqwjjgCB0RsVAyYB8rjBYXKQugcK9ENTjnzpDTZnkNmF08bG-Y_nYHcDqm3KSXmEhMqhA1n_1TYmgGN_LRqLGFGvtp-jItLclT6M3FGJniYThkUlzgZWg-Niiuqys5T6RlrBUOLTvZgDC5uV7LC_VGH_AwPz_7DP3HUVGr3yANd2lqajz8GgC6umu8iRYSny2C32rPzSjO6gIgrQD1TUbdPVA2mSVOkpAQfJIyOW3iU_J-Ejc9u71hfrXm2LzzNF-LStk0hJCIkOESe2JRUb5N8Tf-CtPaGhnfNlYf75qax-bpOqogx_t250FXNQooX0rXW3BP1Hlo91l-LA2APd6y3HDTFMp1peFJdu8YyWf15xnWpwR4VyGToQZkkoznTjPWNP0xxne9pdBY29HGNHk2dLLc2UMKiV38IcX0ehqRQzBOFA_FCHW5Tfv4OYUm92veGgYCfDdwIIzDKzncUGWz42fcRTfq8yP5aXDJjkAYVOSjApN6mbzw8fNIYdY7vVu_skHAQ6713izx7yi5wtXVpsFPJH0BfgpLeM9fYMXHffoYCL_sQDKnBDr6J6omBG6543HzMyYsIDRI_ZJDLqBWHhZMLPDJilsCldv79HGORB1LsIvcM6oND1R-I5MQM4WPahlUFf55kn6Y6GvsjOuKMTblXTtL9B2VrbMoxRUm6CCA3VxcAL4DgQ&id=${id}` // Replace with full captcha payload
+        });
+
+        if (!postResponse.ok) throw new Error(`Failed to fetch download links. Status code: ${postResponse.status}`);
+        
+        const postHtml = await postResponse.text();
+        const postDoc = new DOMParser().parseFromString(postHtml, 'text/html');
+        
+        // Step 4: Extract download links and prioritize the preferred resolution
+        const resolutionOrder = ['1080P', '720P', '480P', '360P']; // Highest to lowest preference
+        const availableLinks = Array.from(postDoc.querySelectorAll('.dowload a[href^="http"]')).map(link => {
+            const resolutionMatch = link.textContent.match(/\((\d{3,4}P)/i);
+            return {
+                resolution: resolutionMatch ? resolutionMatch[1] : 'Unknown',
+                downloadLink: link.getAttribute('href')
+            };
+        });
+
+        // Select the preferred resolution or fallback
+        let selectedLink = availableLinks.find(link => link.resolution === preferredResolution);
+        if (!selectedLink) {
+            for (const fallback of resolutionOrder) {
+                selectedLink = availableLinks.find(link => link.resolution === fallback);
+                if (selectedLink) break;
+            }
+        }
+
+        if (!selectedLink) {
+            return { title: episodeTitle, downloadLink: null, episodeNumber };
+        }
+
+        // Step 5: Return the download link for the selected resolution
+        return { 
+            title: episodeTitle, 
+            downloadLink: selectedLink.downloadLink, 
+            resolution: selectedLink.resolution, 
+            episodeNumber 
+        };
+
     } catch (error) {
-        console.error('Error occurred during request:', error);
-        return null;
+        return { title: episodeTitle, downloadLink: null, episodeNumber };
     }
 }
 
@@ -268,7 +326,9 @@ function displayEpisodeList(episodeOptions) {
     episodeOptions.forEach(episode => {
         const episodeItem = document.createElement('div');
         episodeItem.classList.add('episode-item');
-        episodeItem.innerHTML = `<a href="${episode.downloadLink}" target="_blank">${episode.title}</a>`;
+        episodeItem.innerHTML = `
+            <a href="${episode.downloadLink}" target="_blank">${episode.title} (${episode.resolution || 'Unknown Resolution'})</a>
+        `;
         fragment.appendChild(episodeItem);
         episodeItem.addEventListener('click', function() {
             episodeItem.classList.add('clicked');
