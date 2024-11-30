@@ -137,7 +137,9 @@ input[type="text"] {
 }
 
 .episode-item a {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px;
     background-color: var(--border-color);
     color: var(--text-color);
@@ -148,6 +150,12 @@ input[type="text"] {
 
 .episode-item:not(.clicked) a:hover {
     background-color: #444444;
+}
+
+.episode-resolution {
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-color);
 }
 
 .episode-item.clicked a {
@@ -297,4 +305,33 @@ input[type="number"] {
 /* Hide scrollbars across different browsers */
 ::-webkit-scrollbar {
     display: none;
+}
+
+/* Style the select dropdown */
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: var(--text-color);
+    background-color: var(--border-color);
+    appearance: none; /* Removes default dropdown arrow styling */
+    -webkit-appearance: none; /* Vendor prefix for WebKit-based browsers */
+    -moz-appearance: none; /* Vendor prefix for Firefox */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%204%205%27%3E%3Cpath%20fill%3D%27%23ffffff%27%20d%3D%27M2%200l2%202H0z%27/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 8px 10px;
+}
+
+select:focus {
+    border-color: var(--btn-bg-color);
+    outline: none;
+}
+
+option {
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
 }

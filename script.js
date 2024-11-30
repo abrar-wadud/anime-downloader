@@ -327,7 +327,10 @@ function displayEpisodeList(episodeOptions) {
         const episodeItem = document.createElement('div');
         episodeItem.classList.add('episode-item');
         episodeItem.innerHTML = `
-            <a href="${episode.downloadLink}" target="_blank">${episode.title} (${episode.resolution || 'Unknown Resolution'})</a>
+            <a href="${episode.downloadLink}" target="_blank">
+                ${episode.title}
+                <span class="episode-resolution">- Resolution: ${episode.resolution || 'Unknown'}</span>
+            </a>
         `;
         fragment.appendChild(episodeItem);
         episodeItem.addEventListener('click', function() {
@@ -337,6 +340,7 @@ function displayEpisodeList(episodeOptions) {
     episodeListContainer.appendChild(fragment);
     episodeListContainer.classList.remove('hidden');
 }
+
 
 function changeUrlFormat(animeUrl, episodeNumber) {
     const base_url = animeUrl.split('category/')[0];
