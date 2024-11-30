@@ -1,47 +1,66 @@
-# Anime Download Link Fetcher
+# Anime Downloader 🎬
 
-Anime Download Link Fetcher is a user-friendly web application that allows users to search for anime, select episodes, and fetch download links for those episodes. This application is deployed on GitHub Pages and can be accessed [here](https://abrar-wadud.github.io/anime-downloader/).
+A simple web application to search and download anime episodes with multiple resolution options.
 
-## Features
+## ⭐ Features
 
-- **Anime Search**: Users can search for anime by title. The application provides search suggestions as the user types, making it easy to find the desired anime.
-- **Episode Selection**: Users can select the start and end episodes they want to download.
-- **Download Link Fetching**: The application fetches download links for the selected episodes from [Anitaku.pe](https://anitaku.pe/).
-- **Dark Mode**: The application supports dark mode for a comfortable viewing experience.
+- Search anime by title
+- View anime details (title, year, episode count)
+- Select download range for episodes
+- Choose preferred video resolution (1080p, 720p, 480p, 360p)
+- Progressive episode download
+- Responsive dark-themed UI
 
-## Technologies Used
+## 🚀 Live Demo
 
-- **HTML**: Used for structuring the web pages.
-- **CSS**: Used for styling the web pages.
-- **JavaScript**: Used for handling user interactions and fetching data from the server.
+Check out the live application: [Anime Downloader](https://abrar-wadud.github.io/anime-downloader/)
 
-## Usage
+## 📦 Technologies Used
 
-1. Visit the [Anime Download Link Fetcher](https://abrar-wadud.github.io/anime-downloader/).
-2. Use the search bar to find the anime you're interested in.
-3. Select the anime from the search results.
-4. Enter the start and end episode numbers.
-5. Click the "Fetch Download Links" button.
-6. Wait for the download links to be fetched and displayed.
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
+- Anitaku API for anime search and metadata
+- Custom proxy for download link extraction
 
-## Contributing
+## 🛠 Installation
 
-Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
+1. Clone the repository
+```bash
+git clone https://github.com/abrar-wadud/anime-downloader.git
+```
 
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them.
-4. Push your changes to your fork.
-5. Submit a pull request.
+2. Open `index.html` in your web browser
 
-## License
+## 🤔 How to Use
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+1. Enter an anime title in the search bar
+2. Select an anime from the search results
+3. Specify start and end episode numbers
+4. Choose your preferred resolution
+5. Click "Download" to fetch episode links
 
-## Acknowledgements
+## 🌈 Highlights
 
-- [Anitaku.pe](https://anitaku.pe/) for providing the anime data.
+- Debounced search functionality
+- Episode download progress indicator
+- Error handling for various scenarios
+- Clean, modern dark-themed design
 
-## Contact
+## 📋 Requirements
 
-If you have any questions or suggestions, feel free to contact me at [tawsif7492@gmail.com](mailto:tawsif7492@gmail.com).
+- Modern web browser with JavaScript enabled
+- Internet connection
+
+## 🔒 Disclaimer
+
+This tool is for educational purposes. Respect copyright laws and the rights of content creators.
+
+## 👤 Author
+
+**Abrar Wadud**
+- GitHub: [@abrar-wadud](https://github.com/abrar-wadud)
+
+## 📝 License
+
+[MIT License](https://opensource.org/licenses/MIT)
