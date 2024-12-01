@@ -148,6 +148,33 @@ async function fetchEpisodeCount(animeUrl) {
     }
 }
 
+async function fetchAnimeDetails(animeUrl) {
+    try {
+        const response = await fetch(animeUrl);
+        if (!response.ok) throw new Error(`Failed to fetch anime page. Status code: ${response.status}`);
+
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+
+        // Extract movie_id and alias_anime
+        const movieIdElement = doc.querySelector('.anime_info_episodes_next #movie_id');
+        const aliasAnimeElement = doc.querySelector('.anime_info_episodes_next #alias_anime');
+
+        const movieId = movieIdElement?.value || null;
+        const aliasAnime = aliasAnimeElement?.value || null;
+
+        if (!movieId || !aliasAnime) {
+            throw new Error('Unable to retrieve movie ID or alias.');
+        }
+
+        // Return the values in an array for further use
+        return [movieId, aliasAnime];
+    } catch (error) {
+        console.error('Error fetching anime details:', error);
+        return [null, null]; // Ensure to return null in case of failure
+    }
+}
+
 function validateEpisodeNumbers(startEpisode, endEpisode) {
     const minEpisode = 1; // minimum allowed episode number
     if (startEpisode < minEpisode) {
@@ -206,9 +233,8 @@ function showError(message) {
 
 async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode, preferredResolution) {
     const episodeOptions = [];
-    const concurrentRequests = 5; // Dynamically set based on network
+    const concurrentRequests = 5;
     const queue = [];
-    const totalEpisodes = endEpisode - startEpisode + 1;
     let fetchedEpisodes = 0;
 
     // Show progress bar
@@ -216,19 +242,30 @@ async function fetchDownloadLinks(animeUrl, startEpisode, endEpisode, preferredR
     const progressBar = document.getElementById('progressBar');
     progressContainer.classList.remove('hidden');
 
-    for (let episodeNumber = startEpisode; episodeNumber <= endEpisode; episodeNumber++) {
-        const episodeUrl = changeUrlFormat(animeUrl, episodeNumber);
-        const episodeTitle = `Episode ${episodeNumber}`;
-        queue.push(scrapeEpisodePage(episodeUrl, episodeTitle, episodeNumber, preferredResolution).then(result => {
+    // Get episodes from the API
+    const episodes = await changeUrlFormat(animeUrl, startEpisode, endEpisode);
+
+    // Handle fetching for each episode
+    const totalEpisodes = episodes.length;
+    for (const episode of episodes) {
+        const { fullUrl, episodeTitle, episodeNumber } = episode;
+
+        queue.push(scrapeEpisodePage(fullUrl, episodeTitle, episodeNumber, preferredResolution).then(result => {
             if (result) episodeOptions.push(result);
             fetchedEpisodes++;
             updateProgressBar(fetchedEpisodes, totalEpisodes, progressBar);
         }));
 
-        if (queue.length >= concurrentRequests || episodeNumber === endEpisode) {
+        // Ensure that the queue processes at least `concurrentRequests` or completes when done
+        if (queue.length >= concurrentRequests) {
             await Promise.all(queue);
-            queue.length = 0;
+            queue.length = 0;  // Clear the queue
         }
+    }
+
+    // Ensure the remaining episodes in the queue are processed, even if there are fewer than `concurrentRequests`
+    if (queue.length > 0) {
+        await Promise.all(queue);
     }
 
     // Sort episodeOptions by episodeNumber before returning
@@ -341,9 +378,40 @@ function displayEpisodeList(episodeOptions) {
     episodeListContainer.classList.remove('hidden');
 }
 
+async function changeUrlFormat(animeUrl, startEpisode, endEpisode) {
+    // Await the result of fetchAnimeDetails to get the animeId and alias
+    const [animeId, animeAlias] = await fetchAnimeDetails(animeUrl);
 
-function changeUrlFormat(animeUrl, episodeNumber) {
-    const base_url = animeUrl.split('category/')[0];
-    const anime_title = animeUrl.split('/').pop();
-    return `${base_url}${anime_title}-episode-${episodeNumber}`;
+    if (!animeId || !animeAlias) {
+        console.error('Failed to retrieve anime details.');
+        return [];
+    }
+
+    // Construct the API URL
+    const apiUrl = `https://ajax.gogocdn.net/ajax/load-list-episode?ep_start=${startEpisode}&ep_end=${endEpisode}&id=${animeId}&alias=${animeAlias}`;
+
+    try {
+        // Fetch the episode list
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`Failed to fetch episode data: ${response.status}`);
+        const html = await response.text();
+
+        // Parse HTML response to extract links and titles
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const episodeElements = doc.querySelectorAll("#episode_related li a");
+
+        // Build an array of episode URLs and titles
+        const episodes = Array.from(episodeElements).map(el => {
+            const relativeUrl = el.getAttribute("href").trim();
+            const fullUrl = `https://anitaku.bz${relativeUrl}`; // Ensure the full URL
+            const episodeTitle = el.querySelector(".name").textContent.trim();
+            const episodeNumber = parseInt(episodeTitle.replace("EP", "").trim(), 10); // Extract episode number
+            return { fullUrl, episodeTitle, episodeNumber };
+        });
+        return episodes;
+    } catch (error) {
+        console.error("Error in changeUrlFormat:", error);
+        return [];
+    }
 }
